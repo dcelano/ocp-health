@@ -51,7 +51,7 @@ def reboot_node(node_name):
 while True:
   # Make a GET request to the OpenShift API to get a list of all nodes
   headers = {'Authorization': f'Bearer {api_token}'}
-  r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers)
+  r = requests.get(f'{api_url}/api/v1/nodes', headers=headers)
   r.raise_for_status()
 
   # Parse the response and get the names of all nodes
