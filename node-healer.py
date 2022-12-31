@@ -25,7 +25,7 @@ ec2 = boto3.client('ec2', aws_access_key_id=aws_access_key_id, aws_secret_access
 def check_node_status(node_name):
   # Make a GET request to the OpenShift API to get the node's status
   headers = {'Authorization': f'Bearer {api_token}'}
-  r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers)
+  r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers, verify=False)
   r.raise_for_status()
 
   # Parse the response and return the node's status
@@ -35,7 +35,7 @@ def check_node_status(node_name):
 def reboot_node(node_name):
   # Get the AWS instance ID of the node
   headers = {'Authorization': f'Bearer {api_token}'}
-  r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers)
+  r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers, verify=False)
   r.raise_for_status()
   node_info = r.json()
   instance_id = node_info['metadata']['labels']['beta.kubernetes.io/instance-id']
@@ -51,7 +51,7 @@ def reboot_node(node_name):
 while True:
   # Make a GET request to the OpenShift API to get a list of all nodes
   headers = {'Authorization': f'Bearer {api_token}'}
-  r = requests.get(f'{api_url}/api/v1/nodes', headers=headers)
+  r = requests.get(f'{api_url}/api/v1/nodes', headers=headers, verify=False)
   r.raise_for_status()
 
   # Parse the response and get the names of all nodes
