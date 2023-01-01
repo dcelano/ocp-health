@@ -38,7 +38,7 @@ def reboot_node(node_name):
   r = requests.get(f'{api_url}/api/v1/nodes/{node_name}', headers=headers, verify=False)
   r.raise_for_status()
   node_info = r.json()
-  instance_id = node_info['metadata']['labels']['beta.kubernetes.io/instance-id']
+  instance_id = node_info['metadata']['annotations']['csi.volume.kubernetes.io/nodeid']
 
   # Reboot the instance using the AWS API
   ec2.reboot_instances(InstanceIds=[instance_id])
