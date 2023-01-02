@@ -1,8 +1,11 @@
 import os
 import configparser
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import boto3
 import time
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # Get the directory containing the script
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -30,7 +33,7 @@ def check_node_status(node_name):
 
   # Parse the response and return the node's status
   node_info = r.json()
-  return node_info['status']['conditions'][0]['status']
+  return node_info['status']['conditions'][3]['status']
 
 def reboot_node(node_name):
   # Get the AWS instance ID of the node
@@ -61,7 +64,7 @@ while True:
   # Check the status of each node
   for node_name in node_names:
     status = check_node_status(node_name)
-    if status != 'Ready':
+    if status != 'True':
       # Keep track of the number of consecutive checks that have returned a notready status
       if not hasattr(check_node_status, 'notready_count'):
         check_node_status.notready_count = 0
